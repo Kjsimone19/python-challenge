@@ -1,0 +1,76 @@
+# Import csv
+import os
+import csv
+
+# Declare path to csv
+csvpath = os.path.join("..",'Resources','election_data.csv')
+
+#variables 
+candidates = {}
+totalVotes = 0 
+stockhamVotes = 0 
+degetteVotes = 0 
+doaneVotes = 0
+
+text_path = "polldata.txt"
+
+#use open command to read the .csv file
+with open(csvpath) as csvFile:
+
+    # set up the reader for the csv file
+    csvReader = csv.reader(csvFile, delimiter=',')
+
+    # read the row of headers- saves header as a variable and goes to the next line to start 
+    csvHeader = next(csvReader)
+
+    #loop
+    for row in csvReader:
+
+        #total votes 
+        totalVotes += 1
+        # dictonary for names, loop through to find toals 
+        name = row[2]
+        if name in candidates:
+            candidates[name] += 1
+        else:
+            candidates[name] = 1
+
+
+
+#find final percentages
+stockhamPercentage = ((candidates['Charles Casper Stockham'])/totalVotes)*100
+degettePercentage = ((candidates['Diana DeGette'])/totalVotes)*100
+doanePercentage = ((candidates['Raymon Anthony Doane'])/totalVotes)*100
+
+#find winner in dictonary 
+winner= max(candidates, key=candidates.get)
+
+#format percentages 3 decimal 
+
+sfinalpercent= round(stockhamPercentage, 3)
+definalpercent= round(degettePercentage, 3)
+dofinalpercent= round(doanePercentage, 3)
+
+#print resultd 
+print("Election Results")
+print("-------------------------------")
+print("Total Votes:" + str(totalVotes))
+print("-------------------------------")
+print(f"Charles Casper Stockham: {sfinalpercent:.3f}% ({candidates['Charles Casper Stockham']})")
+print(f"Diana DeGette: {definalpercent:.3f}% ({candidates['Diana DeGette']})")
+print(f"Raymon Anthony Doane: {dofinalpercent:.3f}% ({candidates['Raymon Anthony Doane']})")
+print("-------------------------------")
+print("Winner: " + str(winner))
+print("-------------------------------")
+
+#text file results
+with open(text_path, 'w') as file:
+    file.write("Election Results")
+    file.write("-------------------------------")
+    file.write("Total Votes:" + str(totalVotes))
+    file.write("-------------------------------")
+    file.write(f"Charles Casper Stockham: {sfinalpercent:.3f}% ({candidates['Charles Casper Stockham']})")
+    file.write(f"Diana DeGette: {definalpercent:.3f}% ({candidates['Diana DeGette']})")
+    file.write(f"Raymon Anthony Doane: {dofinalpercent:.3f}% ({candidates['Raymon Anthony Doane']})")
+    file.write("-------------------------------")
+    file.write("Winner: " + str(winner))
